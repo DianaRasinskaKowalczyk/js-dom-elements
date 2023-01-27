@@ -55,42 +55,38 @@ listArticle.appendChild(ulParent);
 
 list.forEach(function (item) {
 	if (item["parentId"] === null) {
-		let liFirstLevel = document.createElement("li");
-		let liFirstLevelId = item["id"];
+		const liFirstLevel = createMenuItem(item);
+		const liFirstLevelId = item["id"];
 		liFirstLevel.setAttribute("data-id", liFirstLevelId);
-		let linkFirstLevel = document.createElement("a");
-		let linkAddress = item["link"];
-		linkFirstLevel.setAttribute("href", linkAddress);
-		linkFirstLevel.innerText = item["text"];
-		liFirstLevel.appendChild(linkFirstLevel);
 		ulParent.appendChild(liFirstLevel);
 	}
 });
 
 const liParentsList = ulParent.querySelectorAll("li");
-console.log(liParentsList);
 
 liParentsList.forEach(function (item) {
-	let id = Number(item.dataset.id);
-	console.log(id);
-
+	const id = Number(item.dataset.id);
 	const children = list.filter(function (elem) {
 		return elem.parentId === id;
 	});
 
-	let ulSecondLevel = document.createElement("ul");
+	const ulSecondLevel = document.createElement("ul");
 
 	if (children.length > 0) {
 		item.appendChild(ulSecondLevel);
 	}
 
 	children.forEach(function (element) {
-		let liSecondLevel = document.createElement("li");
-		let linkSecondLevel = document.createElement("a");
+		const liSecondLevel = createMenuItem(element);
 		ulSecondLevel.appendChild(liSecondLevel);
-		liSecondLevel.appendChild(linkSecondLevel);
-		linkSecondLevel.innerText = element["text"];
-		let secondLevelLinkAddress = element["link"];
-		linkSecondLevel.setAttribute("href", secondLevelLinkAddress);
 	});
 });
+
+function createMenuItem(item) {
+	const liEl = document.createElement("li");
+	const linkEl = document.createElement("a");
+	liEl.appendChild(linkEl);
+	linkEl.innerText = item["text"];
+	linkEl.setAttribute("href", item["link"]);
+	return liEl;
+}
